@@ -252,11 +252,130 @@ Cada vez que hagas cambios y hagas `git push`, el sitio se actualizará automát
 - **El build falla:** Revisa los logs en la pestaña Actions para ver el error específico
 - **El sitio no carga:** Espera unos minutos y verifica que el workflow se haya completado exitosamente
 
+## Deploy en Vercel
+
+Vercel es una plataforma de deployment muy sencilla que detecta automáticamente Astro y configura todo por ti.
+
+### Prerequisitos
+
+- Una cuenta de [Vercel](https://vercel.com) (gratuita)
+- Tu proyecto subido a un repositorio de GitHub, GitLab o Bitbucket
+
+### Paso 1: Preparar la configuración de Astro (opcional)
+
+Para Vercel, puedes usar el modo estático sin necesidad de configurar `base` o `site`. Si quieres mantener el modo estático para Vercel, tu configuración actual está bien. Si prefieres, puedes simplificar el `astro.config.mjs`:
+
+```javascript
+import { defineConfig } from 'astro/config';
+import react from '@astrojs/react';
+import tailwind from '@astrojs/tailwind';
+
+export default defineConfig({
+  integrations: [react(), tailwind()],
+  output: 'static',
+});
+```
+
+**Nota:** Si también usas GitHub Pages, mantén la configuración con `site` y `base`. Si solo usas Vercel, puedes omitirlos.
+
+### Paso 2: Conectar tu repositorio a Vercel
+
+1. Ve a [vercel.com](https://vercel.com) e inicia sesión (puedes usar tu cuenta de GitHub)
+2. Haz clic en **Add New...** → **Project**
+3. Importa tu repositorio de GitHub:
+   - Si es la primera vez, autoriza a Vercel para acceder a tus repositorios
+   - Selecciona el repositorio que contiene tu proyecto Astro
+   - Haz clic en **Import**
+
+### Paso 3: Configurar el proyecto en Vercel
+
+1. **Configuración del Framework Preset:**
+   - Vercel debería detectar automáticamente que es un proyecto Astro
+   - Verifica que aparezca "Astro" en el Framework Preset
+   - Si no, selecciona "Astro" manualmente
+
+2. **Configuración del Build:**
+   - **Framework Preset:** Astro
+   - **Build Command:** `npm run build` (o `astro build`)
+   - **Output Directory:** `dist` (debería detectarse automáticamente)
+   - **Install Command:** `npm install` (o `npm ci`)
+
+3. **Variables de Entorno:**
+   - En la sección "Environment Variables", agrega:
+     - **Key:** `PUBLIC_SUPABASE_URL`
+     - **Value:** Tu URL de Supabase (ej: `https://tntacrwceejsgdmjajuq.supabase.co`)
+     - Haz clic en **Add**
+   - Agrega la segunda variable:
+     - **Key:** `PUBLIC_SUPABASE_ANON_KEY`
+     - **Value:** Tu clave anónima de Supabase
+     - Haz clic en **Add**
+
+4. **Configuración Avanzada (opcional):**
+   - **Root Directory:** Déjalo vacío (o especifica si tu proyecto está en una subcarpeta)
+   - **Override:** Generalmente no es necesario para proyectos Astro estándar
+
+### Paso 4: Desplegar
+
+1. Haz clic en **Deploy**
+2. Vercel comenzará a construir y desplegar tu proyecto automáticamente
+3. El proceso tarda aproximadamente 1-2 minutos
+4. Una vez completado, recibirás una URL única para tu sitio, por ejemplo:
+   - `https://tu-proyecto.vercel.app`
+   - También puedes configurar un dominio personalizado más tarde
+
+### Paso 5: Actualizaciones automáticas
+
+Cada vez que hagas `git push` a tu repositorio conectado, Vercel detectará los cambios y desplegará automáticamente una nueva versión:
+
+1. Haz tus cambios localmente
+2. Haz commit y push:
+```bash
+git add .
+git commit -m "Mis cambios"
+git push
+```
+3. Vercel detectará el push y comenzará un nuevo deploy automáticamente
+4. Puedes ver el progreso en el dashboard de Vercel
+
+### Configuración de Dominio Personalizado (opcional)
+
+1. Ve al dashboard de tu proyecto en Vercel
+2. Haz clic en **Settings** → **Domains**
+3. Agrega tu dominio personalizado
+4. Sigue las instrucciones para configurar los registros DNS
+
+### Ventajas de Vercel
+
+- ✅ **Deploy automático:** Cada push a tu repositorio despliega automáticamente
+- ✅ **Previews:** Cada pull request genera una URL de preview única
+- ✅ **HTTPS:** Certificados SSL automáticos
+- ✅ **CDN global:** Tu sitio se sirve desde múltiples ubicaciones
+- ✅ **Sin configuración de base path:** Funciona directamente sin configuración adicional
+- ✅ **Dashboard intuitivo:** Fácil de monitorear y gestionar
+
+### Troubleshooting (Solución de Problemas)
+
+- **Error de build:** Revisa los logs en el dashboard de Vercel para ver el error específico
+- **Las variables de entorno no funcionan:** Verifica que las variables estén configuradas correctamente en Settings → Environment Variables
+- **El sitio muestra un error 404:** Verifica que el output directory sea `dist` en la configuración del proyecto
+- **Deploy falla:** Asegúrate de que tu proyecto compile localmente con `npm run build` antes de hacer push
+
+### Comparación: Vercel vs GitHub Pages
+
+| Característica | Vercel | GitHub Pages |
+|---------------|--------|--------------|
+| Setup | Más fácil (detección automática) | Requiere configuración manual |
+| Deploy automático | ✅ Sí | ✅ Sí (con GitHub Actions) |
+| Previews de PR | ✅ Sí, automático | ❌ No |
+| Base path | No necesario | Requiere configuración |
+| Velocidad de deploy | ~1-2 min | ~2-5 min |
+| Costo | Gratis (con límites) | Gratis |
+
 ### Alternativas de Deploy
 
-Si prefieres usar un servicio diferente:
+Si prefieres usar otros servicios:
 
-- **Netlify:** `npm run build` y arrastra la carpeta `dist` a Netlify
-- **Vercel:** Conecta tu repositorio de GitHub directamente desde Vercel
-- **Cloudflare Pages:** Similar a Vercel, con conexión directa a GitHub
+- **Netlify:** Similar a Vercel, con conexión directa a GitHub
+- **Cloudflare Pages:** También detecta Astro automáticamente
+- **GitHub Pages:** Para hosting estático básico (requiere configuración adicional)
 

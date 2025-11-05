@@ -5,7 +5,8 @@ import tailwind from '@astrojs/tailwind';
 // https://astro.build/config
 export default defineConfig({
   integrations: [react(), tailwind()],
-  output: 'server',
-  adapter: undefined
+  output: 'static',
+  site: 'https://bemtorres.github.io',
+  base: '/conecta2',
 });
 
