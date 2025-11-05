@@ -133,6 +133,8 @@ git push -u origin main
 
 ### Paso 2: Configurar Variables de Entorno en GitHub
 
+⚠️ **IMPORTANTE:** Este paso es crítico. Si no configuras las variables de entorno, el build puede completarse pero la aplicación no funcionará en producción.
+
 1. Ve a tu repositorio en GitHub
 2. Haz clic en **Settings** (Configuración)
 3. En el menú lateral, ve a **Secrets and variables** → **Actions**
@@ -140,10 +142,14 @@ git push -u origin main
 5. Agrega los siguientes secretos:
    - **Nombre:** `PUBLIC_SUPABASE_URL`
    - **Valor:** Tu URL de Supabase (ej: `https://tntacrwceejsgdmjajuq.supabase.co`)
+   - Haz clic en **Add secret**
    
 6. Repite el paso para agregar:
    - **Nombre:** `PUBLIC_SUPABASE_ANON_KEY`
    - **Valor:** Tu clave anónima de Supabase
+   - Haz clic en **Add secret**
+
+**Verificación:** Después de agregar los secretos, verifica que aparezcan en la lista. Los nombres deben ser exactamente `PUBLIC_SUPABASE_URL` y `PUBLIC_SUPABASE_ANON_KEY` (con mayúsculas y guiones bajos).
 
 ### Paso 3: Crear el Workflow de GitHub Actions
 
