@@ -110,8 +110,8 @@ import tailwind from '@astrojs/tailwind';
 export default defineConfig({
   integrations: [react(), tailwind()],
   output: 'static', // Cambiar de 'server' a 'static'
-  site: 'https://TU_USUARIO.github.io', // Reemplaza TU_USUARIO con tu usuario de GitHub
-  base: '/NOMBRE_DEL_REPO', // Reemplaza con el nombre de tu repositorio (solo si no es la raíz)
+  site: 'https://bemtorres.github.io', // Reemplaza TU_USUARIO con tu usuario de GitHub
+  base: '/conecta2', // Reemplaza con el nombre de tu repositorio (solo si no es la raíz)
 });
 ```
 
